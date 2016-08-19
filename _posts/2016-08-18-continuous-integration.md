@@ -7,8 +7,7 @@ tags: []
 ---
 {% include JB/setup %}
 
-## Continuous Integration
-Automatic build on Jenkins
+Automatic build with Jenkins
 
 ### Configure Jenkins Project
 
