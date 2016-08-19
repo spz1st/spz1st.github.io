@@ -1,15 +1,52 @@
 ---
 layout: post
 title: "Continuous Integration"
-description: "Automatic test codes with Jekins"
+description: "Automatic code test with Jekins"
 category: Tool Development
 tags: []
 ---
 {% include JB/setup %}
 
-Automatic build with Jenkins
+Automatic code test with Jekins.
 
++ <a href="#sect1">Overview</a>
++ <a href="#sect2">Configure Jenkins Project</a>
++ <a href="#sect3">Create Webhook on Github</a>
+
+<a name="sect1"></a>
+### Overview
+
+It is critical to test your application at various stages of
+its development.
+Every once in a while you'll build the application (compile the codes)
+and run it on test data to make sure the codes work as expected
+and uncover bugs as early as possible.
+Ideally you'd like to have a system that would trigger the build process
+upon some specific events, such as the merge of a branch to the master branch
+from a github repository. This is especially important if the codes are
+contributed by multiple developers and
+you want to ensure the integrated codes (and the product built from the codes)
+in the master branch always in the working condition.
+
+In bioinformatics, we often build pipelines integrated with various tools
+to process various biological data for data mining and knowledge discovery,
+such as processing sequence data for identification of
+genes or mutations associated with some diseases.
+In such cases, we need to test the pipelines every time new tools
+are incorporated into the pipeline or parameters are changed for some tools.
+
++ What is continuous integration? How does it fit in with unit testing and integration testing
++ How does CI for bioinformatics pipelines different from CI for compiled software development or webdev, how are they similar? What are some special things about CI for pipelines in terms of Snakemake, Conda, running on the cluster?
++ Intro to Jenkins (feel free to throw it under the bus). How does it differ from TravisCI?
++ Intro to Github/Github enterprise hooks. What is not working out of the box?
++ Slack integration, what is involved
++ Problems encountered
++ Source code
+
+<a name="sect2"></a>
 ### Configure Jenkins Project
+
+![jenkins configure](/images/jenkins01.png)
 
 First create a new project (item) as Pipeline.
 
@@ -97,7 +134,7 @@ node ('respublica-slave') {
 }
 ```
 
-
+<a name="sect3"></a>
 ### Create Webhook on Github
 On the Github repository page, click **Settings** on the menubar,
 then click **Hooks & services** in the left panel followed by clicking
