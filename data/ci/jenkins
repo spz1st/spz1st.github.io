@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+use JSON;
+use CGI;
+use Configure;
+$cgi = new CGI;
+
+$0 =~ s/.*\///;
+
+print "Content-type: text/html\n\n";
+
+$payload = $cgi->param('payload');
+
+if(!$payload)
+{
+    if($cgi->param('data'))
+    {
+        $user = $cgi->param('user');
+        $pass = $cgi->param('pass');
+        if($user && $pass)
+        {
+            $status = addJenkinsUser($user, $pass);
+            if($status < 0)
+            {
+                print "Failed to add user $user.\n";
+            }
+            elsif($status)
+            {
+                print "User $user updated successfully.\n";
+            }
+            else
+            {
+                print "User $user added successfully.\n";
+            }
+        }
+        else
+        {
+            print "Missing input value\n";
+        }
+        print "<p><button onClick=\"window.history.back();\">Back</button>\n";
+    }
+    else
+    {
+        #print 'login: ', getpwuid($<);
+        print "<h3>Add Jenkins User</h3>\n";
+        print "<form method=\"POST\" action=\"/cgi-bin/$0\">\n";
+        print "<td><input type=\"hidden\" name=\"data\" value=\"1\"></td>\n";
+        print "<table>\n";
+        print "<tr>";
+        print "<td>Username</td>\n";
+        print "<td><input name=\"user\" value=\"\"></td>\n";
+        print "</tr>";
+        print "<tr>";
+        print "<td>Password</td>\n";
+        print "<td><input type=\"password\" name=\"pass\" value=\"\"></td>\n";
+        print "</tr>";
+        print "<tr>";
+        print "<td><input type=\"submit\" value=\"Submit\"></td>\n";
+        print "<td><input type=\"reset\" value=\"Reset\"></td>\n";
+        print "</tr>";
+        print "</table>\n";
+    }
+
+    exit(0);
+}
+
+$payload = decode_json($payload);
+
+$ref = $payload->{'ref'};
+$branch = $cgi->param('branch');
+if(! $branch || $branch eq '*')
+{
+    $build = 1;
+}
+else
+{
+    $build = 0;
+    foreach (split(/[,:]/, $cgi->param('branch')))
+    {
+        if($ref =~ /heads\/$_$/)
+        {
+            $build = 1;
+            last;
+        }
+    }
+}
+
+if($build)
+{
+    $user = $cgi->param('user');
+    $token = $cgi->param('token');
+    $url = $cgi->param('url');
+    $pass = password($user);
+    $curl = "curl --user $user:$pass $url?token=$token";
+    system($curl);
+}
+
+exit(0);
