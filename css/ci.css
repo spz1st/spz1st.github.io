@@ -1,0 +1,15 @@
+img {
+   border: 1px solid #ccc;
+}
+.floatright {
+  float: right;
+  margin-left: 10px;
+}
+.caption {
+   text-align: center;
+   weight: heavy;
+}
+
+.block {
+   display: inline-block;
+}
