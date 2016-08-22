@@ -218,6 +218,7 @@ node ('respublica-slave') {
 
 
 <a name="webhook"></a>
+
 ### Create Webhook on Github
 
 On the Github repository page, click **Settings** on the menubar,
@@ -249,6 +250,7 @@ URL to fit your case. The script [jenkins](#scripts)
 can be downloaded from the links listed below.
 
 <a name="scripts"></a>
+
 ### CGI Scripts on a Web Server
 
    * Script to receive notice from GitHub and trigger the build on Jenkins:
