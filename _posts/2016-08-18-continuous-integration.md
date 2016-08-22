@@ -29,12 +29,13 @@ and run it on test data to make sure the codes work as expected
 and uncover bugs as early as possible.
 Ideally you'd like to have a system that would trigger the build process
 upon some specific events, such as the merge of a branch to the master branch
-from a github repository. This is especially important if the codes are
+from a [GitHub](http://github.com) repository.
+This is especially important if the codes are
 contributed by multiple developers and
 you want to ensure the integrated codes (and the product built from the codes)
 in the master branch always in the working condition.
 
-In development of bioinformatics application,
+In development of bioinformatics applications,
 we often build pipelines that integrate various tools
 to process biological data for data mining and knowledge discovery,
 such as processing sequence data for identification of
@@ -42,7 +43,11 @@ genes or mutations associated with some diseases.
 In such cases, we need to test the pipelines every time new tools
 are incorporated into the pipelines or parameters are changed for some tools.
 
-Here we present a way to automatically run a pipeline
+Here we present a system
+implemented at the bioinformatics group
+in the Department of Biomedical and Health Informactics
+of the Children's Hospital of Philadelphia
+to automatically run a pipeline
 with [Jenkins](https://jenkins.io/)
 when changes are pushed or merged to
 the master branch of the github repository of the pipeline codes.
@@ -193,7 +198,7 @@ node ('respublica-slave') {
 On the Github repository page, click **Settings** on the menubar,
 then click **Hooks & services** in the left panel followed by clicking
 **Add webhook** button at upper right.
-On the **Webhoooks / Manage webhook** frame, spaecify
+On the **Webhoooks / Manage webhook** frame, specify
 
 
    * Payload URL: <font color="blue">http&ratio;//mitomapd.research.chop.edu/cgi-bin/jenkins?user=zhangs3&branch=master&token=grin_test@chop&url=http&ratio;//jenkins-ops-dbhi.research.chop.edu/view/BiG/job/grin_master/build</font>
@@ -224,7 +229,7 @@ can be downloaded from the links listed below.
 
    * Script to receive notice from GitHub and trigger the build on Jenkins:
 [jenkins](/data/ci/jenkins)
-   * Script to receive and send notifications (Slack/Email):
+   * Script to receive notifications from the Jenkins server and send notifications (Slack/Email):
 [jenkinsjobs](/data/ci/jenkinsjobs)
 
 
