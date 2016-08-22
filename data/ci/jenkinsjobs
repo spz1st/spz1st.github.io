@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+#
+# A script to receive build status from a Jenkins server
+# and send out notification to Slack, and email addresses, if specified.
 
 use JSON;
 use CGI;
@@ -12,13 +15,14 @@ $0 =~ s/.*\///;
 my $DEBUG = 1;
 
 use vars qw($key $val $success);
-my $email = 'zhangs3@email.chop.edu';
+my $email = '';  # specify email addresses, if needed.
 
 $val = $cgi->param('POSTDATA');
 
 if(!$val)
 {
-    print OUT "no data for POSTDATA\n" if $DEBUG;
+    # silently quit after putting an error note in the web log.
+    print STDERR "no data for POSTDATA\n";
     exit(0);
 }
 
@@ -55,63 +59,21 @@ else
     }
 }
 
+#you may change the command to send notice to other chatrooms other than Slack
+
 $data .= $url . "console\n";
 
 my $cmd = 'curl -X POST -H \'Content-type: application/json\' --data \'{"text":"' . $data . '"}\' https://hooks.slack.com/services/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';
 
 system($cmd);
 
-$cmd = "mail -s 'Jenkins Build Status' $email";
-open(MAIL, "|$cmd");
-print MAIL $data;
-close(MAIL);
+if($email)  # if email addresses are specified
+{
+    $cmd = "mail -s 'Jenkins Build Status' $email";
+    open(MAIL, "|$cmd");
+    print MAIL $data;
+    close(MAIL);
+}
 
 exit(0);
 
-sub printhash
-{
-    my $val = shift;
-    my $lvl = shift;
-    my $ind = "\t" x $lvl++; 
-
-    foreach $key (sort keys %$val)
-    {
-        if(ref($val->{$key}) eq 'HASH')
-        {
-            print OUT $ind, $key , ":\n";
-            printhash($val->{$key}, $lvl);
-        }
-        elsif(ref($val->{$key}) eq 'ARRAY')
-        {
-            print OUT $ind, $key , ":\n";
-            printarray($val->{$key}, $lvl);
-        }
-        else # must be scalar
-        { 
-            print OUT $ind, $key , '=', $val->{$key}, "\n";
-        }
-    }
-}
-
-sub printarray
-{
-    my $val = shift;
-    my $lvl = shift;
-    my $ind = "\t" x $lvl++; 
-
-    foreach $val (sort @$val)
-    {
-        if(ref($val) eq 'HASH')
-        {
-            printhash($val, $lvl);
-        }
-        elsif(ref($val) eq 'ARRAY')
-        {
-            printarray($val, $lvl);
-        }
-        else # must be scalar
-        { 
-            print OUT $ind, $val, "\n";
-        }
-    }
-}

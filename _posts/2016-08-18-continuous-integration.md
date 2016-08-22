@@ -10,12 +10,15 @@ tags: []
 
 Automatic code test with Jekins.
 
-+ <a href="#sect1">Overview</a>
-+ <a href="#sect2">Create Jenkins Project</a>
-+ <a href="#sect3">Configure Jenkins Project</a>
-+ <a href="#sect4">Create Webhook on Github</a>
+### Outline
 
-<a name="sect1"></a>
++ <a href="#overview">Overview</a>
++ <a href="#jenkins">Create Jenkins Project</a>
++ <a href="#conf">Configure Jenkins Project</a>
++ <a href="#webhook">Create Webhook on Github</a>
++ <a href="#scripts">CGI Scripts on a Web Server</a>
+
+<a name="overview"></a>
 ### Overview
 
 It is critical to test your application at various stages of
@@ -52,7 +55,7 @@ But once the codes are merged into the master branch,
 the test on the pipeline with the merged codes will be automatically triggered
 and the status of the test process will be reported to the developers.
 
-<a name="sect2"></a>
+<a name="jenkins"></a>
 ### Create Jenkins Project
 
 <!--
@@ -80,7 +83,7 @@ we created a pipeline.
 You can create other kind of project appropriate for you.
 
 
-<a name="sect3"></a>
+<a name="conf"></a>
 ### Configure Jenkins Project
 
 <figure class="floatright">
@@ -100,23 +103,24 @@ you should set them to fit your case.
 #### Check the following and set their parameters
 
    * Discard Old Builds
-      * Strategy: Log Rotation
-      * max # of builds to keep: 6
+      * **Strategy**: Log Rotation
+      * **max # of builds to keep**: 6
    * GitHub Project
-      * Project url: http://github.research.chop.edu/BiG/grin/
+      * **Project url**: http://github.research.chop.edu/BiG/grin/
 
 
 #### Set Job Notifications
 
 Add two notification endpoints (at job start or job completion) for Jenkins to send out a notice to a web CGI (Fig. 1). The CGI script [jenkinsjobs](#scripts)
-is attached at the end of the blog. Of course you need to point URL to your own web server.
+can be downloaded from the links listed at the end of the blog.
+Of course you need to point URL to your own web server.
 
-   * Format: JSON
-   * Protocol: HTTP
-   * Event: Job Started **or** Job Completed
-   * URL: http://mitomapd.research.chop.edu/cgi-bin/jenkinsjobs
-   * Timeout: 30000(ms)
-   * Log: -1 (send all log messages)
+   * **Format**: JSON
+   * **Protocol**: HTTP
+   * **Event**: Job Started **or** Job Completed
+   * **URL**: http://mitomapd.research.chop.edu/cgi-bin/jenkinsjobs
+   * **Timeout**: 30000(ms)
+   * **Log**: -1 (send all log messages)
 
 Then check the following options:
 
@@ -210,35 +214,43 @@ node ('respublica-slave') {
 ```
 
 
-<a name="sect4"></a>
+<a name="webhook"></a>
 ### Create Webhook on Github
+
 On the Github repository page, click **Settings** on the menubar,
 then click **Hooks & services** in the left panel followed by clicking
 **Add webhook** button at upper right.
 On the **Webhoooks / Manage webhook** frame, spaecify
 
+
    * Payload URL: <font color="blue">http&ratio;//mitomapd.research.chop.edu/cgi-bin/jenkins?user=zhangs3&branch=master&token=grin_test@chop&url=http&ratio;//jenkins-ops-dbhi.research.chop.edu/view/BiG/job/grin_master/build</font>
 
-     * user: the user account under which to run the build on Jenkins
-     * branch: the branch of which being updated to trigger the build on Jenkins
-     * token: the token from Jenkins project
-     * url: the URL for remotely trigger the build on Jenkins
+     * **user**: the user account under which to run the build on Jenkins.
+See comments in the script **jenkins** on how to authenticate to the Jenkins server.
+     * **branch**: the branch a push of which will trigger the build
+on the Jenkins server.
+If no branch is specified or the branch is specified as an asterisk (*),
+a push to any branch will trigger the build on the Jenkins server.
+Here the master branch is specified.
+     * **token**: the token from Jenkins project,
+as specified in the configuration of the Jenkins project (see Fig. 2).
+     * **url**: the URL for remotely triggering the build on Jenkins.
+Change the server name and the path to your Jenkins project to fit your case.
 
    * Content type: application/x-www-form-urlencoded
 
 
-Note that the user specified must be added by accessing the web
-page at http://mitomapd.research.chop.edu/cgi-bin/jenkins.
+Note that you need to change the server and the path
+to the CGI script **jenkins** in the
+URL to fit your case. The script [jenkins](#scripts)
+can be downloaded from the links listed below.
 
 <a name="scripts"></a>
-### CGIs on a Web Server
+### CGI Scripts on a Web Server
 
-#### CGI to receive notice from GitHub and trigger build on Jenkins
-
-The file **jenkins**.
-
-#### CGI to receive and send notifications (Slack/Email)
-
-The file **jenkinsjobs**.
+   * CGI to receive notice from GitHub and trigger the build on Jenkins:
+[jenkins](/data/ci/jenkins)
+   * CGI to receive and send notifications (Slack/Email):
+[jenkinsjobs](/data/ci/jenkinsjobs)
 
 
