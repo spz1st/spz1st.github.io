@@ -164,54 +164,23 @@ the opiton to specify a specific branch.
 You can specify how to run your pipeline when the build is triggered.
 In our case, we chose to run the pipeline in a **Groovy** script
 (selected **Pipeline script** and
-check the box **Use Groovy Sandbox**), as shown below.
+check the box **Use Groovy Sandbox**) on a specific node, as shown below.
 
 
 ```
 node ('respublica-slave') {
     // in Groovy
-    def workspace = "/home/svc_cbmicid/.jenkins/workspace/grin_master" // created by Jenkins
-    def workdir = "/mnt/isilon/cbmi/variome/zhangs3/projects/data/jenkins" // to run snakemake pipeline
-    def repodir = "/mnt/isilon/cbmi/variome/zhangs3/projects/repo/jenkins" // cloned repository
-    env.PATH = "${workspace}/miniconda/bin:${env.PATH}"
-    env.PATH = "${workspace}/miniconda/envs/grinenv/bin:${env.PATH}"
-    
-    stage 'Setup' // usually need only do once
+    stage 'Build'
     sh """
-        # it requires three files: install_miniconda.sh, setup_conda_env.sh and requirements.txt
-        cd ${workspace}
-        # copy the three files from somewhere the first time run the setup.
-        rm -rf miniconda  # in case not the first time
-        ./install_miniconda.sh ${workspace}
-        ./setup_conda_env.sh ${workspace}
-    """
-    
-    stage 'Cleanup'
-    sh """
-        # remove old files or sub directories, if necessary
-        cd ${workdir}
-        #rm -rf lustre/*
-        rm -rf lustre/GRCh37/picard
-        rm -rf lustre/GRCh38/picard
-        rm -rf GRCh37
-        rm -rf GRCh38
-        rm -rf .snakemake
-    """
+        # cd to the repository directory and check out the master branch
 
-    stage 'Checkout'  // check out the merged master branch
-    sh """
-        cd ${repodir}
         git checkout master
         git pull
-        # only update conda environments if necessary
-        diff -qB requirements.txt requirements.prev || conda install --name grinenv --file requirements.txt && cp requirements.txt requirements.prev
-     """
-    
-    stage 'Build' // main point is to start snakemake in the working directory
-    sh """
-        cd ${workdir}
-        source activate grinenv  # set the environment
-        snakemake --latency-wait 10 -j 10 --cluster-config configs/cluster.yaml -c 'qsub -V -l h_vmem={cluster.h_vmem} -l mem_free={cluster.mem_free} -l m_mem_free={cluster.m_mem_free} -pe smp {threads}' comvcfs
+
+        # prepare your environments if necessary
+
+        # our pipeline is coded in a snakefile
+        snakemake
     """
 }
 ```
