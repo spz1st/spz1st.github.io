@@ -19,6 +19,7 @@ Automatic code test with Jekins.
 + <a href="#scripts">CGI Scripts on a Web Server</a>
 
 <a name="overview"></a>
+
 ### Overview
 
 It is critical to test your application at various stages of
@@ -56,6 +57,7 @@ the test on the pipeline with the merged codes will be automatically triggered
 and the status of the test process will be reported to the developers.
 
 <a name="jenkins"></a>
+
 ### Create Jenkins Project
 
 <!--
@@ -84,6 +86,7 @@ You can create other kind of project appropriate for you.
 
 
 <a name="conf"></a>
+
 ### Configure Jenkins Project
 
 <figure class="floatright">
@@ -248,9 +251,9 @@ can be downloaded from the links listed below.
 <a name="scripts"></a>
 ### CGI Scripts on a Web Server
 
-   * CGI to receive notice from GitHub and trigger the build on Jenkins:
+   * Script to receive notice from GitHub and trigger the build on Jenkins:
 [jenkins](/data/ci/jenkins)
-   * CGI to receive and send notifications (Slack/Email):
+   * Script to receive and send notifications (Slack/Email):
 [jenkinsjobs](/data/ci/jenkinsjobs)
 
 
