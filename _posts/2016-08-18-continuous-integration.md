@@ -104,6 +104,12 @@ In this specific case,
 we created a pipeline (Fig. 1).
 You can create other kind of project appropriate for you.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <a name="conf"></a>
 
@@ -184,7 +190,7 @@ upon a push to the [GitHub](http://github.com) repository.)
 #### Pipeline
 
 You can specify how to run your pipeline when the build is triggered.
-In our case, we chose to run the pipeline in a **Groovy** script
+In our case, we chose to run the pipeline in a [Groovy](http://www.groovy-lang.org/) script
 (selected **Pipeline script** and
 check the box **Use Groovy Sandbox**) on a specific node, as shown below.
 
@@ -249,15 +255,19 @@ can be downloaded from the links listed below.
    * Script to receive notifications from the [Jenkins](https://jenkins.io/) server and send notifications (Slack/Email):
 [jenkinsjobs](/data/ci/jenkinsjobs)
 
+<a name="ack"></a>
 
 ### Acknowledgement
 
-I'd like to thank Jeremy Leipzig and LeMar Davidson
-for their invaluable help
-and input with the implemenation of the CI system.
+I'd like to thank Jeremy Leipzig
+for his input and help
+with the implemenation of the CI system
+and the preparation of the blog, and thank LeMar Davidson
+for his help with debugging the configuration
+of the project on the [Jenkins](https://jenkins.io/) server.
 
 The blog was written
-with help from Jekyll Bootstrap and Bootstrap.
+with the help from [Jekyll](https://jekyllrb.com/) Bootstrap and Bootstrap.
 
 &copy; 2016 Shiping Zhang
 
