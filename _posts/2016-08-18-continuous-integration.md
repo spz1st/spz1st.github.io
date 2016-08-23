@@ -17,55 +17,69 @@ Automatic code test with Jekins.
 + <a href="#conf">Configure Jenkins Project</a>
 + <a href="#webhook">Create Webhook on Github</a>
 + <a href="#scripts">CGI Scripts on a Web Server</a>
++ <a href="#ack">Acknowledgement</a>
 
 <a name="overview"></a>
 
 ### Overview
 
-It is critical to test your application at various stages of
+It is critical to build and test your application at various stages of
 its development.
-Every once in a while you'll build the application (compile the codes)
-and run it on test data to make sure the codes work as expected
+Every once in a while you'll build the application
+from the integrated codes
+(assuming various components or units of the codes
+have already passed unit test)
+and run it on test data to make sure the application works as expected
 and uncover bugs as early as possible.
 Ideally you'd like to have a system that would trigger the build process
 upon some specific events, such as the merge of a branch to the master branch
-from a [GitHub](http://github.com) repository.
+from a [GitHub](http://github.com) repository
+if you have decided to always build the final application
+with the codes from the master branch (the master branch is the default branch
+created when you create a [GitHub](http://github.com) repository;
+[please click here for more info](https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is)).
 This is especially important if the codes are
 contributed by multiple developers and
 you want to ensure the integrated codes (and the product built from the codes)
 in the master branch always in the working condition.
 
 In development of bioinformatics applications,
-we often build pipelines that integrate various tools
+we often build pipelines to manage workflows that integrate various tools 
 to process biological data for data mining and knowledge discovery,
-such as processing sequence data for identification of
-genes or mutations associated with some diseases.
-In such cases, we need to test the pipelines every time new tools
-are incorporated into the pipelines or parameters are changed for some tools.
+such as processing sequence data for the identification of
+genes or mutations associated with diseases.
+In such cases, we need to test a pipeline every time new tools
+are incorporated into the pipeline or parameters are changed for some tools.
 
-Here we present a system
-implemented at the bioinformatics group
+Here we present a way
+we implemented at the bioinformatics group
 in the Department of Biomedical and Health Informactics
 of the Children's Hospital of Philadelphia
+([CHOP](http://www.chop.edu))
 to automatically run a pipeline
 with [Jenkins](https://jenkins.io/)
-when changes are pushed or merged to
-the master branch of the github repository of the pipeline codes.
-This pipeline is coded in a snakefile and executed with snakemake.
-Jobs of the pipeline can run on local machine or can be submitted
-to a cluster. 
-Recipes of the pipeline came from more than one developer,
+when changes to the pipeline codes are pushed or merged to
+the master branch of the [GitHub](http://github.com) repository.
+In this particular case,
+the pipeline is coded in a snakefile and executed with
+[snakemake](https://pypi.python.org/pypi/snakemake)
+(please read the
+[tutorial](http://snakemake.bitbucket.org/snakemake-tutorial.html)
+if you're not familiar with 
+[snakemake](https://pypi.python.org/pypi/snakemake)).
+Recipes of the pipeline come from more than one developer,
 each writing and testing codes in separate branches
-before pushing the codes and merging with the master branch.
-But once the codes are merged into the master branch,
-the test on the pipeline with the merged codes will be automatically triggered
-and the status of the test process will be reported to the developers.
+before pushing the codes and merging with the master branch,
+the codes of which are used as the production copy.
+Once the codes from a branch are merged into the master branch,
+the test on the pipeline with the merged codes are automatically triggered
+and the status of the test process will be reported to the developers
+(see below).
 
 <a name="jenkins"></a>
 
 ### Create Jenkins Project
 
-<!--
 <figure class="floatright">
 <img src="/images/jenkins01.png" alt="Fig1" />
 <br>
@@ -74,19 +88,20 @@ and the status of the test process will be reported to the developers.
 <br>
 <br>
 </figure>
--->
 
-<a href="https://jenkins.io/">Jenkins</a> is an open source automation server
+[Jenkins](https://jenkins.io/) is an open source automation server
 for building, testing and deploying projects. It works in similar ways
 as [Travis CI](https://travis-ci.org/) except that the repository
-can be from your own [GitHub](http://github.com) server
-and the test is done on your own servers.
+can be from your internal [GitHub](http://github.com) enterprise server
+and the tests are done on your own servers.
+Here we assume you have a [Jenkins](https://jenkins.io/) server set up
+and created an account on the server for you.
 
-Once you have a <a href="https://jenkins.io/">Jenkins</a> server set up
-and have created an account,
+To set up your application under development for continuous integration
+with [Jenkins](https://jenkins.io/), 
 the first step is to create a new project (item).
 In this specific case,
-we created a pipeline.
+we created a pipeline (Fig. 1).
 You can create other kind of project appropriate for you.
 
 
@@ -95,15 +110,15 @@ You can create other kind of project appropriate for you.
 ### Configure Jenkins Project
 
 <figure class="floatright">
-<img src="/images/jenkins02.png" alt="Fig1" />
+<img src="/images/jenkins02.png" alt="Fig2" />
 <br>
 <br>
-<figcaption class="caption">Fig. 1 Set Endpints</figcaption>
+<figcaption class="caption">Fig. 2 Set Endpints</figcaption>
 <br>
 <br>
 </figure>
 
-Once a Jenkins project is created, you need to set its configuration.
+Once a [Jenkins](https://jenkins.io/) project is created, you need to set its configuration.
 Some settings described here are just for your reference and
 you should set them to fit your case.
 
@@ -113,13 +128,13 @@ you should set them to fit your case.
    * Discard Old Builds
       * **Strategy**: Log Rotation
       * **max # of builds to keep**: 6
-   * GitHub Project
+   * [GitHub](http://github.com) Project
       * **Project url**: http://github.research.chop.edu/BiG/grin/
 
 
 #### Set Job Notifications
 
-Add two notification endpoints (at job start or job completion) for Jenkins to send out a notice to a web CGI (Fig. 1). The CGI script [jenkinsjobs](#scripts)
+Add two notification endpoints (at job start or job completion) for [Jenkins](https://jenkins.io/) to send out a notice to a web CGI (Fig. 2). The CGI script [jenkinsjobs](#scripts)
 can be downloaded from the links listed at the end of the blog.
 Of course you need to point URL to your own web server.
 
@@ -133,17 +148,17 @@ Of course you need to point URL to your own web server.
 Then check the following options:
 
    * Prepare an environment for the run
-   * Keep Jenkins Environment Variables
-   * Keep Jenkins Build Variables
+   * Keep [Jenkins](https://jenkins.io/) Environment Variables
+   * Keep [Jenkins](https://jenkins.io/) Build Variables
    * Execute concurrent builds if necessary
 
 #### Build Triggers
 
 <figure class="floatright">
-<img src="/images/jenkins03.png" alt="Fig1" />
+<img src="/images/jenkins03.png" alt="Fig3" />
 <br>
 <br>
-<figcaption class="caption">Fig. 2 Set Build Trigger</figcaption>
+<figcaption class="caption">Fig. 3 Set Build Trigger</figcaption>
 <br>
 <br>
 </figure>
@@ -151,17 +166,19 @@ Then check the following options:
 
 Check **Trigger builds remotely (e.g., from scripts)** and set
 **Authentication Token**. The token will be included in the URL
-used to trigger the build (Fig. 2).
+used to trigger the build (Fig. 3).
 
 Please note that here you have the option to set the build to
-be triggered by a push to a github repository.
+be triggered by a push to a [GitHub](http://github.com) repository.
 But we chose not to use this option because
-
-   1. Somehow we could not get it to work after half dozen tries
-   2. More importantly, we wanted to trigger the build
+we wanted to trigger the build
 only by a push or merge to the master branch, not just a push to any branches.
 The webhook you can set up at [GitHub](http://github.com) doesn't give you
 the opiton to specify a specific branch.
+(Actually for some unknown causes,
+we could not get it to work after half dozen tries
+to trigger a build on the [Jenkins](https://jenkins.io/) server
+upon a push to the [GitHub](http://github.com) repository.)
 
 
 #### Pipeline
@@ -203,17 +220,17 @@ On the **Webhoooks / Manage webhook** frame, specify
 
    * Payload URL: <font color="blue">http&ratio;//mitomapd.research.chop.edu/cgi-bin/jenkins?user=zhangs3&branch=master&token=grin_test@chop&url=http&ratio;//jenkins-ops-dbhi.research.chop.edu/view/BiG/job/grin_master/build</font>
 
-     * **user**: the user account under which to run the build on Jenkins.
-See comments in the script **jenkins** on how to authenticate to the Jenkins server.
+     * **user**: the user account under which to run the build on [Jenkins](https://jenkins.io/).
+See comments in the script **jenkins** on how to authenticate to the [Jenkins](https://jenkins.io/) server.
      * **branch**: the branch a push of which will trigger the build
-on the Jenkins server.
+on the [Jenkins](https://jenkins.io/) server.
 If no branch is specified or the branch is specified as an asterisk (*),
-a push to any branch will trigger the build on the Jenkins server.
+a push to any branch will trigger the build on the [Jenkins](https://jenkins.io/) server.
 Here the master branch is specified.
-     * **token**: the token from Jenkins project,
-as specified in the configuration of the Jenkins project (see Fig. 2).
-     * **url**: the URL for remotely triggering the build on Jenkins.
-Change the server name and the path to your Jenkins project to fit your case.
+     * **token**: the token from [Jenkins](https://jenkins.io/) project,
+as specified in the configuration of the [Jenkins](https://jenkins.io/) project (see Fig. 3).
+     * **url**: the URL for remotely triggering the build on [Jenkins](https://jenkins.io/).
+Change the server name and the path to your [Jenkins](https://jenkins.io/) project to fit your case.
 
    * Content type: application/x-www-form-urlencoded
 
@@ -227,9 +244,20 @@ can be downloaded from the links listed below.
 
 ### CGI Scripts on a Web Server
 
-   * Script to receive notice from GitHub and trigger the build on Jenkins:
+   * Script to receive notice from [GitHub](http://github.com) and trigger the build on [Jenkins](https://jenkins.io/):
 [jenkins](/data/ci/jenkins)
-   * Script to receive notifications from the Jenkins server and send notifications (Slack/Email):
+   * Script to receive notifications from the [Jenkins](https://jenkins.io/) server and send notifications (Slack/Email):
 [jenkinsjobs](/data/ci/jenkinsjobs)
 
+
+### Acknowledgement
+
+I'd like to thank Jeremy Leipzig and LeMar Davidson
+for their invaluable help
+and input with the implemenation of the CI system.
+
+The blog was written
+with help from Jekyll Bootstrap and Bootstrap.
+
+&copy; 2016 Shiping Zhang
 
