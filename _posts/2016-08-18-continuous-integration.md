@@ -104,13 +104,6 @@ In this specific case,
 we created a pipeline (Fig. 1).
 You can create other kind of project appropriate for you.
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 <a name="conf"></a>
 
 ### Configure Jenkins Project
@@ -269,5 +262,6 @@ of the project on the [Jenkins](https://jenkins.io/) server.
 The blog was written
 with the help from [Jekyll](https://jekyllrb.com/) Bootstrap and Bootstrap.
 
+---
 &copy; 2016 Shiping Zhang
 
