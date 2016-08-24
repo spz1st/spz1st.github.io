@@ -112,7 +112,7 @@ You can create other kind of project appropriate for you.
 <img src="/images/jenkins02.png" alt="Fig2" />
 <br>
 <br>
-<figcaption class="caption">Fig. 2 Set Endpints</figcaption>
+<figcaption class="caption">Fig. 2 Set Notification Endpoints</figcaption>
 <br>
 <br>
 </figure>
@@ -242,6 +242,8 @@ can be downloaded from the links listed below.
 <a name="scripts"></a>
 
 ### CGI Scripts on a Web Server
+
+Click the script names to download.
 
    * Script to receive notice from [GitHub](http://github.com) and trigger the build on [Jenkins](https://jenkins.io/):
 [jenkins](/data/ci/jenkins)
