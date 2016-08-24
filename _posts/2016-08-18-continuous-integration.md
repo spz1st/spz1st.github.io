@@ -62,11 +62,13 @@ when changes to the pipeline codes are pushed or merged to
 the master branch of the [GitHub](http://github.com) repository.
 In this particular case,
 the pipeline is coded in a snakefile and executed with
-[snakemake](https://pypi.python.org/pypi/snakemake)
-(please read the
+[snakemake](https://pypi.python.org/pypi/snakemake).
+Snakemake is a general-purpose workflow management system coupled with
+the [Python](https://www.python.org/) language.
+Please read the
 [tutorial](http://snakemake.bitbucket.org/snakemake-tutorial.html)
 if you're not familiar with 
-[snakemake](https://pypi.python.org/pypi/snakemake)).
+[snakemake](https://pypi.python.org/pypi/snakemake).
 Recipes of the pipeline come from more than one developer,
 each writing and testing codes in separate branches
 before pushing the codes and merging with the master branch,
