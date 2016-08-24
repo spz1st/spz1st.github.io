@@ -261,9 +261,3 @@ and the preparation of the blog, and thank LeMar Davidson
 for his help with debugging the configuration
 of the project on the [Jenkins](https://jenkins.io/) server.
 
-The blog was written
-with the help from [Jekyll](https://jekyllrb.com/) Bootstrap and Bootstrap.
-
----
-&copy; 2016 Shiping Zhang
-
