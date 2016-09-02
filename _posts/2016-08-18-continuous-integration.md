@@ -219,14 +219,16 @@ then click **Hooks & services** in the left panel followed by clicking
 On the **Webhoooks / Manage webhook** frame, specify
 
 
-   * Payload URL: <font color="blue">http&ratio;//mitomapd.research.chop.edu/cgi-bin/jenkins?user=zhangs3&branch=master&token=grin_test@chop&url=http&ratio;//jenkins-ops-dbhi.research.chop.edu/view/BiG/job/grin_master/build</font>
+   * Payload URL: <font color="blue">http&ratio;//mitomapd.research.chop.edu/cgi-bin/jenkins?user=zhangs3&branch=master&token=grin_test@chop&url=http&ratio;//jenkins-ops-dbhi.research.chop.edu/view/BiG/job/grin_master/buildWithParameters</font>
 
      * **user**: the user account under which to run the build on [Jenkins](https://jenkins.io/).
 See comments in the script **jenkins** on how to authenticate to the [Jenkins](https://jenkins.io/) server.
-     * **branch**: the branch a push of which will trigger the build
+     * **branch**: the branch(s) a push of which will trigger the build
+for the specified branch
 on the [Jenkins](https://jenkins.io/) server.
+You can specify more than one branch separated by commas (,) or semicolons (:).
 If no branch is specified or the branch is specified as an asterisk (*),
-a push to any branch will trigger the build on the [Jenkins](https://jenkins.io/) server.
+a push to any branch will trigger the build for the master branch.
 Here the master branch is specified.
      * **token**: the token from [Jenkins](https://jenkins.io/) project,
 as specified in the configuration of the [Jenkins](https://jenkins.io/) project (see Fig. 3).
@@ -245,12 +247,12 @@ can be downloaded from the links listed below.
 
 ### CGI Scripts on a Web Server
 
-Click the script names to download.
+Click the script names to get them.
 
-   * Script to receive notice from [GitHub](http://github.com) and trigger the build on [Jenkins](https://jenkins.io/):
-[jenkins](/data/ci/jenkins)
+   * Script to receive notice from [GitHub](http://github.com) and trigger the build on Jenkins:
+[jenkins](https://github.com/spz1st/spz1st.github.io/blob/master/data/ci/jenkins)
    * Script to receive notifications from the [Jenkins](https://jenkins.io/) server and send notifications (Slack/Email):
-[jenkinsjobs](/data/ci/jenkinsjobs)
+[jenkinsjobs](https://github.com/spz1st/spz1st.github.io/blob/master/data/ci/jenkinsjobs)
 
 <a name="ack"></a>
 

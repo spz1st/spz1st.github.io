@@ -25,7 +25,7 @@ $payload = decode_json($payload);
 $branch = $cgi->param('branch');
 if(! $branch || $branch eq '*') # no branch specified or specified with a wildcard
 {
-    $build = 1;
+    $build = 'master';
 }
 else
 {
@@ -35,7 +35,7 @@ else
     {
         if($ref =~ /heads\/$_$/)  # branch matches
         {
-            $build = 1;
+            $build = $_;
             last;
         }
     }
@@ -47,13 +47,13 @@ if($build)
     $token = $cgi->param('token');
     $url = $cgi->param('url');
     $pass = password($user);  # fetch the password, see comments below
-    $curl = "curl --user $user:$pass $url?token=$token";
+    $curl = "curl --user $user:$pass $url?token=$token&BRANCH=$build";
     system($curl);
 }
 
 exit(0);
 
-# the subroutin password is supposed to return the password of the user
+# the subroutine password is supposed to return the password of the user
 # it's up to you how to store and fetch the user's password.
 sub password
 {
