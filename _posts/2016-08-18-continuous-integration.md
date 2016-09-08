@@ -80,16 +80,14 @@ and the status of the test process will be reported to the developers
 
 <a name="jenkins"></a>
 
-### Create Jenkins Project
-
 <figure class="floatright">
 <img src="/images/jenkins01.png" alt="Fig1" />
 <br>
-<br>
 <figcaption class="caption">Fig. 1 Create Jenkins Project</figcaption>
 <br>
-<br>
 </figure>
+
+### Create Jenkins Project
 
 [Jenkins](https://jenkins.io/) is an open source automation server
 for building, testing and deploying projects. It works in similar ways
@@ -113,9 +111,7 @@ You can create other kind of project appropriate for you.
 <figure class="floatright">
 <img src="/images/jenkins02.png" alt="Fig2" />
 <br>
-<br>
 <figcaption class="caption">Fig. 2 Set Notification Endpoints</figcaption>
-<br>
 <br>
 </figure>
 
@@ -132,6 +128,11 @@ you should set them to fit your case.
    * [GitHub](http://github.com) Project
       * **Project url**: http://github.research.chop.edu/BiG/grin/
 
+<br>
+<br>
+<br>
+<br>
+<br>
 
 #### Set Job Notifications
 
@@ -146,28 +147,46 @@ Of course you need to point URL to your own web server.
    * **Timeout**: 30000(ms)
    * **Log**: -1 (send all log messages)
 
-Then check the following options:
+<figure class="floatright">
+<img src="/images/jenkins03.png" alt="Fig3" />
+<br>
+<figcaption class="caption">Fig. 3 Set Build Trigger</figcaption>
+<br>
+</figure>
 
+Then check the following options and, if needed, set the settings:
+
+   * This build is parameterized (Fig. 3)
+
+      This option is for branch specification.
+      * select **String Parameter**
+      * define the name of parameter to use (e.g. BRANCH)
+      * set the default value (e.g. master)
+      * write the description, if needed.
    * Prepare an environment for the run
    * Keep [Jenkins](https://jenkins.io/) Environment Variables
    * Keep [Jenkins](https://jenkins.io/) Build Variables
    * Execute concurrent builds if necessary
 
+<br>
+<br>
+<br>
+<br>
+<br>
 #### Build Triggers
 
 <figure class="floatright">
-<img src="/images/jenkins03.png" alt="Fig3" />
+<img src="/images/jenkins04.png" alt="Fig4" />
 <br>
 <br>
-<figcaption class="caption">Fig. 3 Set Build Trigger</figcaption>
-<br>
+<figcaption class="caption">Fig. 4 Set Build Trigger</figcaption>
 <br>
 </figure>
 
 
 Check **Trigger builds remotely (e.g., from scripts)** and set
 **Authentication Token**. The token will be included in the URL
-used to trigger the build (Fig. 3).
+used to trigger the build (Fig. 4).
 
 Please note that here you have the option to set the build to
 be triggered by a push to a [GitHub](http://github.com) repository.
@@ -195,9 +214,9 @@ node ('respublica-slave') {
     // in Groovy
     stage 'Build'
     sh """
-        # cd to the repository directory and check out the master branch
+        # cd to the repository directory and check out the specified branch
 
-        git checkout master
+        git checkout ${BRANCH}
         git pull
 
         # prepare your environments if necessary
@@ -227,11 +246,10 @@ See comments in the script **jenkins** on how to authenticate to the [Jenkins](h
 for the specified branch
 on the [Jenkins](https://jenkins.io/) server.
 You can specify more than one branch separated by commas (,) or semicolons (:).
-If no branch is specified or the branch is specified as an asterisk (*),
-a push to any branch will trigger the build for the master branch.
+You must sepcify at least one branch.
 Here the master branch is specified.
      * **token**: the token from [Jenkins](https://jenkins.io/) project,
-as specified in the configuration of the [Jenkins](https://jenkins.io/) project (see Fig. 3).
+as specified in the configuration of the [Jenkins](https://jenkins.io/) project (see Fig. 4).
      * **url**: the URL for remotely triggering the build on [Jenkins](https://jenkins.io/).
 Change the server name and the path to your [Jenkins](https://jenkins.io/) project to fit your case.
 

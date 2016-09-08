@@ -23,14 +23,10 @@ if(!$payload)  # must have been invoked directly
 $payload = decode_json($payload);
 
 $branch = $cgi->param('branch');
-if(! $branch || $branch eq '*') # no branch specified or specified with a wildcard
-{
-    $build = 'master';
-}
-else
+if($branch) # branch must be specified
 {
     $ref = $payload->{'ref'};  # should contain the name of the pushed branch 
-    $build = 0;
+    $build = '';
     foreach (split(/[,:]/, $branch))
     {
         if($ref =~ /heads\/$_$/)  # branch matches
@@ -39,16 +35,16 @@ else
             last;
         }
     }
-}
 
-if($build)
-{
-    $user = $cgi->param('user');
-    $token = $cgi->param('token');
-    $url = $cgi->param('url');
-    $pass = password($user);  # fetch the password, see comments below
-    $curl = "curl --user $user:$pass $url?token=$token&BRANCH=$build";
-    system($curl);
+    if($build)
+    {
+        $user = $cgi->param('user');
+        $token = $cgi->param('token');
+        $url = $cgi->param('url');
+        $pass = password($user);  # fetch the password, see comments below
+        $curl = "curl --user $user:$pass $url?token=$token&BRANCH=$build";
+        system($curl);
+    }
 }
 
 exit(0);
