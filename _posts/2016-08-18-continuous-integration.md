@@ -132,7 +132,6 @@ you should set them to fit your case.
 <br>
 <br>
 <br>
-<br>
 
 #### Set Job Notifications
 
@@ -173,6 +172,7 @@ Then check the following options and, if needed, set the settings:
 <br>
 <br>
 <br>
+
 #### Build Triggers
 
 <figure class="floatright">
